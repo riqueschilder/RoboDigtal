@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Robot Control</title>
+</head>
+<body>
+    <h1>Robot Control</h1>
+    <button onclick="moveBackward()">Esquerda</button>
+    <button onclick="moveForward()">Direita</button>
+    <button onclick="moveRight()">Cima</button>
+    <button onclick="moveLeft()">Baixo</button>
+    <button onclick="moveUp()">Frente</button>
+    <button onclick="moveDown()">Tras</button>
+    <script>
+        function moveForward() {
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "http://127.0.0.1:5000/move_forward");
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.send(JSON.stringify({direction: "forward"}));
+        }
+        function moveBackward() {
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "http://127.0.0.1:5000/move_backward");
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.send(JSON.stringify({direction: "backward"}));
+        }
+        function moveRight() {
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "http://127.0.0.1:5000/move_right");
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.send(JSON.stringify({direction: "right"}));
+        }
+        function moveLeft() {
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "http://127.0.0.1:5000/move_left");
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.send(JSON.stringify({direction: "left"}));
+        }
+        function moveUp() {
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "http://127.0.0.1:5000/move_up");
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.send(JSON.stringify({direction: "up"}));
+        }
+        function moveDown() {
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "http://127.0.0.1:5000/move_down");
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.send(JSON.stringify({direction: "down"}));
+        }
+    </script>
+</body>
+</html>
