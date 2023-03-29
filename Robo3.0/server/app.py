@@ -16,10 +16,11 @@ def get_robot_position():
     # conectando-se ao banco de dados SQLite
     conn = sqlite3.connect('position.db')
     cursor = conn.cursor()
-    # selecionando a posição atual do robô a partir do banco de dados
-    cursor.execute('SELECT * FROM position')
+    # selecionando a última posição do robô a partir do banco de dados
+    cursor.execute('SELECT * FROM position ORDER BY id DESC LIMIT 1')
     position = cursor.fetchone()
     # fechando a conexão com o banco de dados
+    cursor.close()
     conn.close()
     # retornando a posição atual do robô em formato JSON
     return jsonify({'x': position[0], 'y': position[1], 'z': position[2]})
@@ -30,11 +31,15 @@ def move_forward():
     # conectando-se ao banco de dados SQLite
     conn = sqlite3.connect('position.db')
     cursor = conn.cursor()
+    # selecionando a última posição do robô a partir do banco de dados
+    cursor.execute("SELECT * FROM position ORDER BY id DESC")
+    result = cursor.fetchone()
     # atualizando a posição x do robô para frente
-    cursor.execute("UPDATE position SET x = x + 1 WHERE id = 1")
+    cursor.execute(f"INSERT INTO position (x,y,z) VALUES ({result[0]+1}, {result[1]}, {result[2]})")
     # salvando as alterações no banco de dados
     conn.commit()
     # fechando a conexão com o banco de dados
+    cursor.close()
     conn.close()
     # retornando um JSON indicando que a operação foi bem sucedida
     return jsonify({'success': True})
@@ -44,11 +49,16 @@ def move_backward():
     # conectando-se ao banco de dados SQLite
     conn = sqlite3.connect('position.db')
     cursor = conn.cursor()
-    # atualizando a posição x do robô para trás
-    cursor.execute("UPDATE position SET x = x - 1 WHERE id = 1")
+    
+    # selecionando a última posição do robô a partir do banco de dados
+    cursor.execute("SELECT * FROM position ORDER BY id DESC")
+    result = cursor.fetchone()
+    # atualizando a posição x do robô para trás 
+    cursor.execute(f"INSERT INTO position (x,y,z) VALUES ({result[0]-1}, {result[1]}, {result[2]})")
     # salvando as alterações no banco de dados
     conn.commit()
     # fechando a conexão com o banco de dados
+    cursor.close()
     conn.close()
     # retornando um JSON indicando que a operação foi bem sucedida
     return jsonify({'success': True})
@@ -58,11 +68,16 @@ def move_right():
     # conectando-se ao banco de dados SQLite
     conn = sqlite3.connect('position.db')
     cursor = conn.cursor()
+    # selecionando a última posição do robô a partir do banco de dados
+    
+    cursor.execute("SELECT * FROM position ORDER BY id DESC")
+    result = cursor.fetchone()
     # atualizando a posição y do robô para a direita
-    cursor.execute("UPDATE position SET y = y + 1 WHERE id = 1")
+    cursor.execute(f"INSERT INTO position (x,y,z) VALUES ({result[0]}, {result[1]+1}, {result[2]})")
     # salvando as alterações no banco de dados
     conn.commit()
     # fechando a conexão com o banco de dados
+    cursor.close()
     conn.close()
     # retornando um JSON indicando que a operação foi bem sucedida
     return jsonify({'success': True})
@@ -74,13 +89,17 @@ def move_left():
     conn = sqlite3.connect('position.db')
     cursor = conn.cursor()
     
-    # Executa uma query SQL para atualizar a posição do robô
-    cursor.execute("UPDATE position SET y = y - 1 WHERE id = 1")
+    # selecionando a última posição do robô a partir do banco de dados
+    cursor.execute("SELECT * FROM position ORDER BY id DESC")
+    result = cursor.fetchone()
+    # atualizando a posição y do robô para a esquerda
+    cursor.execute(f"INSERT INTO position (x,y,z) VALUES ({result[0]}, {result[1]-1}, {result[2]})")
     
     # Salva as alterações no banco de dados
     conn.commit()
     
     # Fecha a conexão com o banco de dados
+    cursor.close()
     conn.close()
     
     # Retorna uma resposta JSON indicando que a operação foi concluída com sucesso
@@ -95,12 +114,16 @@ def move_up():
     cursor = conn.cursor()
     
     # Executa uma query SQL para atualizar a posição do robô
-    cursor.execute("UPDATE position SET z = z + 1 WHERE id = 1")
+    cursor.execute("SELECT * FROM position ORDER BY id DESC")
+    result = cursor.fetchone()
+    cursor.execute(f"INSERT INTO position (x,y,z) VALUES ({result[0]}, {result[1]}, {result[2]+1})")
+    
     
     # Salva as alterações no banco de dados
     conn.commit()
     
     # Fecha a conexão com o banco de dados
+    cursor.close()
     conn.close()
     
     # Retorna uma resposta JSON indicando que a operação foi concluída com sucesso
@@ -115,12 +138,16 @@ def move_down():
     cursor = conn.cursor()
     
     # Executa uma query SQL para atualizar a posição do robô
-    cursor.execute("UPDATE position SET z = z - 1 WHERE id = 1")
+    cursor.execute("SELECT * FROM position ORDER BY id DESC")
+    result = cursor.fetchone()
+
+    cursor.execute(f"INSERT INTO position (x,y,z) VALUES ({result[0]}, {result[1]}, {result[2]-1})")
     
     # Salva as alterações no banco de dados
     conn.commit()
     
     # Fecha a conexão com o banco de dados
+    cursor.close()
     conn.close()
     
     # Retorna uma resposta JSON indicando que a operação foi concluída com sucesso
